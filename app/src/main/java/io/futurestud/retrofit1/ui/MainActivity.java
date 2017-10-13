@@ -3,14 +3,13 @@ package io.futurestud.retrofit1.ui;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import io.futurestud.retrofit1.R;
-import io.futurestud.retrofit1.api.model.GitHubRepo;
-import io.futurestud.retrofit1.api.service.GitHubClient;
-import io.futurestud.retrofit1.ui.adapter.GitHubRepoAdapter;
+import io.futurestud.retrofit1.api.model.Stock;
+import io.futurestud.retrofit1.api.service.StockClient;
+import io.futurestud.retrofit1.ui.adapter.StockAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,25 +29,25 @@ public class MainActivity extends AppCompatActivity {
 
 
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
+                .baseUrl("http://192.168.0.119:8000/")
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.build();
 
-        GitHubClient client = retrofit.create(GitHubClient.class);
-        Call<List<GitHubRepo>> call = client.reposForUser("fs-opensource");
+        StockClient client1=retrofit.create(StockClient.class);
+        Call<List<Stock>> call1 =  client1.stocksforuser();
 
-        call.enqueue(new Callback<List<GitHubRepo>>() {
+        
+        call1.enqueue(new Callback<List<Stock>>() {
             @Override
-            public void onResponse(Call<List<GitHubRepo>> call, Response<List<GitHubRepo>> response) {
-                List<GitHubRepo> repos = response.body();
-
-                listView.setAdapter(new GitHubRepoAdapter(MainActivity.this, repos));
+            public void onResponse(Call<List<Stock>> call, Response<List<Stock>> response) {
+                List<Stock> stocks = response.body();
+                listView.setAdapter(new StockAdapter(MainActivity.this, stocks));
             }
 
             @Override
-            public void onFailure(Call<List<GitHubRepo>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "error :(", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<List<Stock>> call, Throwable t) {
+
             }
         });
     }
