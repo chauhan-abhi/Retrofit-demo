@@ -4,7 +4,9 @@ import java.util.List;
 
 import io.futurestud.retrofit1.api.model.Stock;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 /**
@@ -13,6 +15,9 @@ import retrofit2.http.Path;
 
 public interface StockClient {
 
-    @GET("/stocks")
+    @GET("/stocks/")
     Call<List<Stock>> stocksforuser();
+
+    @POST("stocks/")
+    Call<Stock> createStock(@Body Stock stock);
 }

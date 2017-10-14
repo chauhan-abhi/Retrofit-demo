@@ -2,7 +2,9 @@ package io.futurestud.retrofit1.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -34,14 +36,17 @@ public class MainActivity extends AppCompatActivity {
 
         Retrofit retrofit = builder.build();
 
-        StockClient client1=retrofit.create(StockClient.class);
-        Call<List<Stock>> call1 =  client1.stocksforuser();
+        //GET implementation
 
-        
-        call1.enqueue(new Callback<List<Stock>>() {
+       /* StockClient client=retrofit.create(StockClient.class);
+        Call<List<Stock>> call =  client.stocksforuser();
+
+
+        call.enqueue(new Callback<List<Stock>>() {
             @Override
             public void onResponse(Call<List<Stock>> call, Response<List<Stock>> response) {
                 List<Stock> stocks = response.body();
+               // Log.v("respm" ,response.body().toString());
                 listView.setAdapter(new StockAdapter(MainActivity.this, stocks));
             }
 
@@ -49,7 +54,25 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<List<Stock>> call, Throwable t) {
 
             }
+        });*/
+
+       //POST implementaion
+        Stock stock=new Stock("hp",1.2f,4.5f,100);
+        StockClient client = retrofit.create(StockClient.class);
+        Call<Stock> call = client.createStock(stock);
+        call.enqueue(new Callback<Stock>() {
+            @Override
+            public void onResponse(Call<Stock> call, Response<Stock> response) {
+                Toast.makeText(MainActivity.this, "New Stock Posted", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Stock> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Posting toast Failed", Toast.LENGTH_SHORT).show();
+            }
         });
+
+
     }
 
 }
